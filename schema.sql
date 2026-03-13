@@ -7,6 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS moderation_logs;
 DROP TABLE IF EXISTS alerts;
 DROP TABLE IF EXISTS alert_subscriptions;
+DROP TABLE IF EXISTS refresh_tokens;
 DROP TABLE IF EXISTS report_votes;
 DROP TABLE IF EXISTS reports;
 DROP TABLE IF EXISTS incidents;
@@ -26,6 +27,23 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_users_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE refresh_tokens (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    token_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    revoked_at DATETIME NULL,
+    CONSTRAINT fk_refresh_tokens_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+    UNIQUE KEY uq_refresh_tokens_token_hash (token_hash),
+    KEY idx_refresh_tokens_user_id (user_id),
+    KEY idx_refresh_tokens_expires_at (expires_at),
+    KEY idx_refresh_tokens_revoked_at (revoked_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE incident_categories (
