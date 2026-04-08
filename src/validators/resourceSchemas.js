@@ -20,6 +20,19 @@ const nullableInteger = {
   nullable: true
 };
 
+const coordinateString = (min, max) => ({
+  type: "string",
+  required: true,
+  custom: (value) => {
+    if (typeof value !== "string" || value.trim() === "") {
+      return false;
+    }
+
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed >= min && parsed <= max;
+  }
+});
+
 const schemas = {
   register: createSchemaValidator({
     name: { type: "string", required: true, minLength: 2, maxLength: 100 },
@@ -193,7 +206,21 @@ const schemas = {
       notes: { type: "string", maxLength: 2000, nullable: true }
     },
     { partial: true }
-  )
+  ),
+  externalRouteQuery: createSchemaValidator({
+    start_lat: coordinateString(-90, 90),
+    start_lng: coordinateString(-180, 180),
+    end_lat: coordinateString(-90, 90),
+    end_lng: coordinateString(-180, 180),
+    profile: {
+      type: "string",
+      enum: ["driving-car", "cycling-regular", "foot-walking"]
+    }
+  }),
+  externalContextQuery: createSchemaValidator({
+    latitude: coordinateString(-90, 90),
+    longitude: coordinateString(-180, 180)
+  })
 };
 
 module.exports = schemas;

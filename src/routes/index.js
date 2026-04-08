@@ -10,8 +10,9 @@ const reportVotesController = require("../controllers/reportVotesController");
 const alertSubscriptionsController = require("../controllers/alertSubscriptionsController");
 const alertsController = require("../controllers/alertsController");
 const moderationLogsController = require("../controllers/moderationLogsController");
+const externalIntegrationsController = require("../controllers/externalIntegrationsController");
 const { authenticate, authorize } = require("../middleware/authenticate");
-const { validateBody, validateIdParam } = require("../middleware/validateRequest");
+const { validateBody, validateIdParam, validateQuery } = require("../middleware/validateRequest");
 const schemas = require("../validators/resourceSchemas");
 
 const router = express.Router();
@@ -81,5 +82,8 @@ router.get("/moderation-logs/:id", authenticate, authorize("admin", "moderator")
 router.post("/moderation-logs", authenticate, authorize("admin", "moderator"), validateBody(schemas.moderationLogCreate), moderationLogsController.createModerationLog);
 router.put("/moderation-logs/:id", authenticate, authorize("admin"), validateIdParam, validateBody(schemas.moderationLogUpdate), moderationLogsController.updateModerationLog);
 router.delete("/moderation-logs/:id", authenticate, authorize("admin"), validateIdParam, moderationLogsController.deleteModerationLog);
+
+router.get("/external/routes", validateQuery(schemas.externalRouteQuery), externalIntegrationsController.getRoute);
+router.get("/external/context", validateQuery(schemas.externalContextQuery), externalIntegrationsController.getContextSnapshot);
 
 module.exports = router;

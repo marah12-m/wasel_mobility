@@ -33,7 +33,17 @@ const validateBody = (validator) => (req, res, next) => {
   }
 };
 
+const validateQuery = (validator) => (req, res, next) => {
+  try {
+    validator(req.query, req);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   validateIdParam,
-  validateBody
+  validateBody,
+  validateQuery
 };

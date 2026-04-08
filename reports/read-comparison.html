@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read Test Comparison</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --panel-alt: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --accent: #0f766e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero, section, .metric-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    .hero p {
+      margin: 4px 0;
+      color: var(--muted);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      padding: 20px;
+    }
+
+    .metric-card h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .metric-card strong {
+      font-size: 1.9rem;
+      display: block;
+    }
+
+    section {
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel-alt);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: #f1f5f9;
+      font-size: 0.9rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+      background: #ecfeff;
+      color: var(--accent);
+    }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+  <div class="hero">
+    <h1>Read Test Comparison</h1>
+    <p><span class="pill">Generated 2026-04-08T17:22:58.513Z</span><span class="pill">Source reports\after-read.json</span></p>
+    <p class="muted">BASE_URL: http://localhost:3000</p>
+  </div>
+  
+  <div class="metrics-grid">
+    <div class="metric-card"><h3>Average Response Time</h3><strong>2.89 ms</strong></div>
+    <div class="metric-card"><h3>p95 Latency</h3><strong>4.09 ms</strong></div>
+    <div class="metric-card"><h3>Throughput</h3><strong>8.73 req/s</strong></div>
+    <div class="metric-card"><h3>Error Rate</h3><strong>0.00%</strong></div>
+  </div>
+
+  <section>
+    <h2>1. Required Test Scenarios</h2>
+    <table>
+      <tr><th>Scenario File</th><th>Average</th><th>p95</th><th>Throughput</th><th>Error Rate</th></tr>
+      
+    <tr>
+      <td>after-read.json</td>
+      <td>2.89 ms</td>
+      <td>4.09 ms</td>
+      <td>8.73 req/s</td>
+      <td>0.00%</td>
+    </tr>
+  
+    </table>
+  </section>
+  <section>
+    <h2>2. Required Metrics</h2>
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Average Response Time</td><td>2.89 ms</td></tr>
+      <tr><td>p95 Latency</td><td>4.09 ms</td></tr>
+      <tr><td>Throughput</td><td>8.73 req/s</td></tr>
+      <tr><td>Error Rate</td><td>0.00%</td></tr>
+    </table>
+  </section>
+  <section><h2>3. Identified Bottlenecks</h2><ul><li>No obvious bottleneck is visible from request-level metrics alone. Confirm with infrastructure metrics and database traces.</li></ul></section>
+  <section><h2>4. Observed Limitations</h2><ul><li>This report is derived from request-level k6 output only; CPU, memory, database, and network telemetry are not included.</li><li>Application correctness is inferred from HTTP status codes and JSON responses, not from domain-specific assertions.</li><li>Results depend on the environment under test, dataset size, and whether caches were warm or cold.</li></ul></section>
+  <section><h2>5. Root Causes</h2><ul><li>No single root cause is confirmed from k6 metrics alone.</li><li>Use this report as a triage artifact and validate with application logs and database instrumentation.</li></ul></section>
+  <section><h2>6. Optimizations Applied</h2><ul><li>Database schema includes foreign-key indexes and a unique composite index on report votes to keep common lookups and integrity checks efficient.</li><li>MySQL access uses a connection pool instead of opening a new database connection per request.</li><li>External API calls use in-memory TTL caching to reduce repeated upstream requests.</li><li>External API calls use fixed-window rate limiting and minimum request intervals to avoid upstream throttling.</li><li>External API calls enforce timeouts with AbortController so slow providers do not block request handling indefinitely.</li><li>Request validation happens before service and database work, reducing wasted processing on invalid input.</li></ul></section>
+  <section>
+    <h2>7. Before vs After Comparison</h2>
+    <table>
+      <tr><th>Metric</th><th>Baseline</th><th>Current</th><th>Delta</th></tr>
+      
+        <tr>
+          <td>Average Response Time (ms)</td>
+          <td>3.81</td>
+          <td>2.89</td>
+          <td>-0.92</td>
+        </tr>
+      
+        <tr>
+          <td>p95 Latency (ms)</td>
+          <td>7.49</td>
+          <td>4.09</td>
+          <td>-3.40</td>
+        </tr>
+      
+        <tr>
+          <td>Throughput (req/s)</td>
+          <td>8.76</td>
+          <td>8.73</td>
+          <td>-0.04</td>
+        </tr>
+      
+        <tr>
+          <td>Error Rate (%)</td>
+          <td>0.00</td>
+          <td>0.00</td>
+          <td>0.00</td>
+        </tr>
+      
+    </table>
+  </section>
+
+  </div>
+</body>
+</html>
