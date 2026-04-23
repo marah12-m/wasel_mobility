@@ -16,7 +16,10 @@ const { validateBody, validateIdParam, validateQuery } = require("../middleware/
 const schemas = require("../validators/resourceSchemas");
 
 const router = express.Router();
-
+//Add health check endpoint
+router.get("/health", (req, res) => {
+    res.json({ status: "OK", message: "Server is running" });
+});
 router.post("/auth/register", validateBody(schemas.register), authController.register);
 router.post("/auth/login", validateBody(schemas.login), authController.login);
 router.post("/auth/refresh", validateBody(schemas.refreshToken), authController.refresh);
